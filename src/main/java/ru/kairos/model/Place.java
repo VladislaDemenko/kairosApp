@@ -17,4 +17,5 @@ public class Place {
     private Double rating = 0.0;
     private Integer reviewCount = 0;
     private List<String> photoUrls = new ArrayList<>();
+    private List<BookingSlot> bookingSlots = new ArrayList<>();
 }
