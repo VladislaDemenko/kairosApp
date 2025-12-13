@@ -165,6 +165,24 @@ public class InMemoryStorage {
         }
     }
 
+    private void addParkSlots(Place place) {
+        LocalDate today = LocalDate.now();
+        String[] events = {"Вечерняя прогулка", "Утренняя пробежка", "Пикник", "Фотосессия"};
+
+        for (int day = 0; day < 3; day++) {
+            BookingSlot slot = new BookingSlot();
+            slot.setId(nextSlotId());
+            slot.setPlaceId(place.getId());
+            slot.setDate(today.plusDays(day));
+            slot.setStartTime(LocalTime.of(10, 0));
+            slot.setEndTime(LocalTime.of(18, 0));
+            slot.setPrice(0.0);
+            slot.setEventName(events[day % events.length]);
+            slot.setAvailable(true);
+            place.getBookingSlots().add(slot);
+        }
+    }
+
     private Long nextCategoryId() {
         return categoryIdGenerator.getAndIncrement();
     }
