@@ -121,6 +121,28 @@ public class InMemoryStorage {
         }
     }
 
+    private void addBeautySalonSlots(Place place) {
+        LocalDate today = LocalDate.now();
+        String[] masters = {"Мария", "Анна", "Елена", "София", "Олига"};
+        String[] services = {"Стрижка", "Окрашивание", "Маникюр", "Педикюр", "Макияж"};
+
+        for (int day = 0; day < 7; day++) {
+            for (int i = 0; i < 12; i ++) {
+                BookingSlot slot = new BookingSlot();
+                slot.setId(nextSlotId());
+                slot.setPlaceId(place.getId());
+                slot.setDate(today.plusDays(day));
+                slot.setStartTime(LocalTime.of(9, 0).plusHours(i));
+                slot.setEndTime(slot.getStartTime().plusHours(1));
+                slot.setPrice(2000.0 + (i * 200));
+                slot.setMasterName(masters[day % masters.length]);
+                slot.setEventName(services[i % services.length]);
+                slot.setAvailable(true);
+                place.getBookingSlots().add(slot);
+            }
+        }
+    }
+
     private Long nextCategoryId() {
         return categoryIdGenerator.getAndIncrement();
     }
