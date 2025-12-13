@@ -25,6 +25,7 @@ public class InMemoryStorage {
     private final AtomicLong placeIdGenerator = new AtomicLong(1);
     private final AtomicLong slotIdGenerator = new AtomicLong(1);
     private final AtomicLong bookingIdGenerator = new AtomicLong(1);
+    private final AtomicLong adminIdGenerator = new AtomicLong(1);
 
     private final Map<String, Long> tokenUserId = new ConcurrentHashMap<>();
     private final Map<Long, String> userIdToToken = new ConcurrentHashMap<>();
@@ -242,6 +243,19 @@ public class InMemoryStorage {
         ));
         testUser.getFavoritePlaceIds().addAll(Arrays.asList(1L, 3L, 5L));
         users.put(testUser.getId(), testUser);
+
+        User admin = new User();
+        admin.setId(nextAdminId());
+        admin.setEmail("admin-email@mail.ru");
+        admin.setPassword("admin123");
+        admin.setCity("Rostov");
+        admin.setTheme("DARK");
+        admin.setEnabled(true);
+        users.put(admin.getId(), admin);
+    }
+
+    private Long nextAdminId() {
+        return adminIdGenerator.getAndIncrement();
     }
 
     private Long nextUserId() {
