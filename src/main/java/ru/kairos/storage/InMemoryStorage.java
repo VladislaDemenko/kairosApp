@@ -329,4 +329,58 @@ public class InMemoryStorage {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
+
+    public List<Place> getAllPlaces() {
+        return new ArrayList<>(places.values());
+    }
+
+    public Place findPlaceById(Long id) {
+        return places.get(id);
+    }
+
+    public List<Place> findPlacesByCategory(Long categoryId) {
+        return places.values().stream()
+                .filter(place -> categoryId.equals(place.getCategoryId()))
+                .collect(Collectors.toList());
+    }
+
+    public List<Place> findPlacesByCity(String city) {
+        return places.values().stream()
+                .filter(place -> city.equalsIgnoreCase(place.getCity()))
+                .collect(Collectors.toList());
+    }
+
+    public List<Place> findPlacesByCategoryAndCity(Long categoryId, String city) {
+        return places.values().stream()
+                .filter(place -> categoryId.equals(place.getCategoryId()))
+                .filter(place -> city.equalsIgnoreCase(place.getCity()))
+                .collect(Collectors.toList());
+    }
+
+    public List<Place> findPlacesByIds(List<Long> ids) {
+        return ids.stream()
+                .map(this::findPlaceById)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
+
+    public List<Place> findFavoritePlaces(Long userId) {
+        User user = findUserById(userId);
+        if (user == null || user.getFavoritePlaceIds().isEmpty()) {
+            return new ArrayList<>();
+        }
+        return findPlacesByIds(user.getFavoritePlaceIds());
+    }
+
+    public void toggleFavoritePlace(Long userId, Long placeId) {
+        User user = findUserById(userId);
+        if (user != null) {
+            if (user.getFavoritePlaceIds().contains(placeId)) {
+                user.getFavoritePlaceIds().remove(placeId);
+            } else {
+                user.getFavoritePlaceIds().add(placeId);
+            }
+            saveUser(user);
+        }
+    }
 }
