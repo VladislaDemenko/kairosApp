@@ -315,4 +315,18 @@ public class InMemoryStorage {
         return new ArrayList<>(users.values());
     }
 
+    public List<Category> getAllCategories() {
+        return new ArrayList<>(categories.values());
+    }
+
+    public Category findCategoryById(Long id) {
+        return categories.get(id);
+    }
+
+    public List<Category> findCategoriesByIds(List<Long> ids) {
+        return ids.stream()
+                .map(this::findCategoryById)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
 }
