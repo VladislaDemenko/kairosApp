@@ -183,6 +183,32 @@ public class InMemoryStorage {
         }
     }
 
+    private void setMuseumSlots(Place place) {
+        LocalDate today = LocalDate.now();
+        String[] tours = {
+                "Обзорная экскурсия",
+                "Экскурсия для детей",
+                "Тематическая выставка/ярмарка",
+                "Аудиогид",
+                "Экскурсии для иностранцев"
+        };
+
+        for (int day = 0; day < 7; day++) {
+            for (int i = 0; i < 4; i++) {
+                BookingSlot slot = new BookingSlot();
+                slot.setId(nextSlotId());
+                slot.setPlaceId(place.getId());
+                slot.setDate(today.plusDays(day));
+                slot.setStartTime(LocalTime.of(10, 0).plusHours(i * 3));
+                slot.setEndTime(slot.getStartTime().plusHours(2));
+                slot.setPrice(500.00 + (i * 300));
+                slot.setEventName(tours[day % tours.length]);
+                slot.setAvailable(true);
+                place.getBookingSlots().add(slot);
+            }
+        }
+    }
+
     private Long nextCategoryId() {
         return categoryIdGenerator.getAndIncrement();
     }
