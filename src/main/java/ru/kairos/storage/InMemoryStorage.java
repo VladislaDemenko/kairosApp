@@ -86,7 +86,7 @@ public class InMemoryStorage {
         places.put(place.getId(), place);
     }
 
-    public void addCafeSlots(Place place) {
+    private void addCafeSlots(Place place) {
         LocalDate today = LocalDate.now();
         for (int day = 0; day < 7; day++) {
             for (int hour = 8; hour < 22; hour += 2) {
@@ -97,6 +97,24 @@ public class InMemoryStorage {
                 slot.setEndTime(slot.getStartTime().plusHours(2));
                 slot.setPrice(place.getAvgCheck() * 0.8);
                 slot.setTableNumber("Столик №" + ((day * 7 + hour / 2) % 10 + 1));
+                slot.setAvailable(true);
+                place.getBookingSlots().add(slot);
+            }
+        }
+    }
+
+    private void addRestaurantSlots(Place place, Double price, String tableType) {
+        LocalDate today = LocalDate.now();
+        for (int day = 0; day < 7; day++) {
+            for (int hour = 12; hour < 23; hour += 2) {
+                BookingSlot slot = new BookingSlot();
+                slot.setId(nextSlotId());
+                slot.setPlaceId(place.getId());
+                slot.setDate(today.plusDays(day));
+                slot.setStartTime(LocalTime.of(hour, 0));
+                slot.setEndTime(slot.getStartTime().plusHours(2));
+                slot.setPrice(price);
+                slot.setTableNumber(tableType + " №" + (day * 6) + hour/2 + 1);
                 slot.setAvailable(true);
                 place.getBookingSlots().add(slot);
             }
