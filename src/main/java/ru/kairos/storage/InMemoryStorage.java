@@ -183,7 +183,7 @@ public class InMemoryStorage {
         }
     }
 
-    private void setMuseumSlots(Place place) {
+    private void addMuseumSlots(Place place) {
         LocalDate today = LocalDate.now();
         String[] tours = {
                 "Обзорная экскурсия",
@@ -203,6 +203,25 @@ public class InMemoryStorage {
                 slot.setEndTime(slot.getStartTime().plusHours(2));
                 slot.setPrice(500.00 + (i * 300));
                 slot.setEventName(tours[day % tours.length]);
+                slot.setAvailable(true);
+                place.getBookingSlots().add(slot);
+            }
+        }
+    }
+
+    private void addActivitySlots(Place place, String activity, Double price) {
+        LocalDate today = LocalDate.now();
+
+        for (int day = 0; day < 7; day++) {
+            for (int i = 0; i < 6; i++) {
+                BookingSlot slot = new BookingSlot();
+                slot.setId(nextSlotId());
+                slot.setPlaceId(place.getId());
+                slot.setDate(today.plusDays(day));
+                slot.setStartTime(LocalTime.of(8,0).plusHours(i * 2));
+                slot.setEndTime(slot.getStartTime().plusHours(2));
+                slot.setPrice(price);
+                slot.setEventName(activity + " - сеанс " + (i + 1));
                 slot.setAvailable(true);
                 place.getBookingSlots().add(slot);
             }
