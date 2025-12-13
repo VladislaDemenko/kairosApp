@@ -254,6 +254,24 @@ public class InMemoryStorage {
         users.put(admin.getId(), admin);
     }
 
+    // Здесь будет тестовые бронирования
+
+    private void createTestBooking(Long userId, Long placeId, Long slotId, String status) {
+        Booking booking = new Booking();
+        booking.setId(nextBookingId());
+        booking.setUserId(userId);
+        booking.setPlaceId(placeId);
+        booking.setSlotId(slotId);
+        booking.setStatus(status);
+        booking.setQrCodeUrl("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=KAIROS-" + booking.getId());
+
+
+    }
+
+    private Long nextBookingId() {
+        return bookingIdGenerator.getAndIncrement();
+    }
+
     private Long nextAdminId() {
         return adminIdGenerator.getAndIncrement();
     }
@@ -273,4 +291,28 @@ public class InMemoryStorage {
     private Long nextSlotId() {
         return slotIdGenerator.getAndIncrement();
     }
+
+    public User findUserById(Long id) {
+        return users.get(id);
+    }
+
+    public User findUserByEmail(String email) {
+        return users.values().stream()
+                .filter(user -> email.equals(user.getEmail()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    private User saveUser(User user) {
+        if (user.getId() == null) {
+            user.setId(nextUserId());
+        }
+        users.put(user.getId(), user);
+        return user;
+    }
+
+    public List<User> getAllUsers() {
+        return new ArrayList<>(users.values());
+    }
+
 }
