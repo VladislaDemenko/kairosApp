@@ -228,6 +228,26 @@ public class InMemoryStorage {
         }
     }
 
+    // Создание тестовых пользователей
+    private void initTestUsers() {
+        User testUser = new User();
+        testUser.setId(nextUserId());
+        testUser.setEmail("test-email@mail.ru");
+        testUser.setPassword("123456");
+        testUser.setCity("Rostov");
+        testUser.setTheme("LIGHT");
+        testUser.setEnabled(true);
+        testUser.getEnabledRandomCategories().addAll(Arrays.asList(
+
+        ));
+        testUser.getFavoritePlaceIds().addAll(Arrays.asList(1L, 3L, 5L));
+        users.put(testUser.getId(), testUser);
+    }
+
+    private Long nextUserId() {
+        return userIdGenerator.getAndIncrement();
+    }
+
     private Long nextCategoryId() {
         return categoryIdGenerator.getAndIncrement();
     }
