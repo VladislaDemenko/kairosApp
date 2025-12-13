@@ -53,11 +53,11 @@ public class InMemoryStorage {
 
     // Заведения
     private void initPlaces() {
-        createMoscowPlaces();
+        createRostovPlaces();
         createSpbPlaces();
     }
 
-    private void createMoscowPlaces() {
+    private void createRostovPlaces() {
 
     }
 
@@ -136,6 +136,28 @@ public class InMemoryStorage {
                 slot.setEndTime(slot.getStartTime().plusHours(1));
                 slot.setPrice(2000.0 + (i * 200));
                 slot.setMasterName(masters[day % masters.length]);
+                slot.setEventName(services[i % services.length]);
+                slot.setAvailable(true);
+                place.getBookingSlots().add(slot);
+            }
+        }
+    }
+
+    private void addBarberShopSlots(Place place) {
+        LocalDate today = LocalDate.now();
+        String[] barbers = {"Александр", "Дмитрий", "Иван", "Сергей", "Максим"};
+        String[] services = {"Стрижка", "Бритье", "Уход за бородой", "Комплекс"};
+
+        for (int day = 0; day < 7; day++) {
+            for (int i = 0; i < 10; i++) {
+                BookingSlot slot = new BookingSlot();
+                slot.setId(nextSlotId());
+                slot.setPlaceId(place.getId());
+                slot.setDate(today.plusDays(day));
+                slot.setStartTime(LocalTime.of(0, 8).plusHours(i));
+                slot.setEndTime(slot.getStartTime().plusHours(1));
+                slot.setPrice(1800.0 + (i * 100));
+                slot.setMasterName(barbers[day % barbers.length]);
                 slot.setEventName(services[i % services.length]);
                 slot.setAvailable(true);
                 place.getBookingSlots().add(slot);
